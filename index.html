@@ -9,1044 +9,899 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      -webkit-user-select: none;
       user-select: none;
+      -webkit-user-select: none;
     }
-    html, body {
+    body, html {
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #e6e6e6;
+      background-color: #e3e3e3;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #111114;
     }
-    #canvas-container {
+    .ln-canvas {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      touch-action: none;
+    }
+    .ui-layer {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
-    }
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    /* Background concentric rings */
-    .bg-rings {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 0;
-      width: 140vmin;
-      height: 140vmin;
-    }
-    .ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      border: 1px solid rgba(0, 0, 0, 0.035);
-      pointer-events: none;
-      transition: transform 0.2s ease-out, opacity 0.2s ease-out;
-    }
-    .ring-1 { width: 32vmin; height: 32vmin; border-color: rgba(0,0,0,0.05); }
-    .ring-2 { width: 55vmin; height: 55vmin; }
-    .ring-3 { width: 82vmin; height: 82vmin; }
-    .ring-4 { width: 115vmin; height: 115vmin; }
-
-    /* Top Left Header */
-    .header {
-      position: absolute;
-      top: 24px;
-      left: 28px;
       z-index: 10;
       pointer-events: none;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      justify-content: space-between;
+      padding: 24px;
     }
-    .header-sub {
-      font-size: 11px;
-      font-weight: 500;
-      color: #888888;
-      letter-spacing: -0.01em;
-    }
-    .header-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1a1a1a;
-      letter-spacing: -0.02em;
+    .header {
+      pointer-events: auto;
       display: flex;
-      align-items: center;
-      gap: 6px;
+      flex-direction: column;
+      gap: 4px;
     }
-    .header-author {
-      font-size: 10px;
-      font-weight: 500;
-      color: #a0a0a0;
-    }
-
-    /* Hint text above toolbar */
-    .hint-text {
-      position: absolute;
-      bottom: 84px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      font-size: 12px;
-      font-weight: 500;
-      color: #777777;
+    .header h1 {
+      font-size: 16px;
+      font-weight: 600;
       letter-spacing: -0.01em;
-      pointer-events: none;
-      white-space: nowrap;
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+      color: #111114;
     }
-
-    /* Floating bottom pill dock */
-    .dock-wrapper {
-      position: absolute;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
+    .header .subtitle {
+      font-size: 12px;
+      color: rgba(17, 17, 20, 0.5);
+    }
+    .header a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .footer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+    .hint {
+      font-size: 11.5px;
+      color: rgba(17, 17, 20, 0.42);
+      letter-spacing: 0.01em;
+      text-align: center;
     }
     .dock {
+      pointer-events: auto;
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 6px 8px;
-      border-radius: 999px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 20px;
+      border: 1px solid rgba(17, 17, 20, 0.08);
+      box-shadow: 0 10px 30px -12px rgba(17, 17, 20, 0.18);
     }
     .swatches {
       display: flex;
-      gap: 6px;
-      padding: 0 2px;
+      align-items: center;
+      gap: 8px;
     }
-    .swatch-btn {
+    .swatch {
       width: 32px;
       height: 32px;
-      border-radius: 9px;
-      border: none;
-      outline: none;
+      border-radius: 50%;
+      border: 2px solid transparent;
       cursor: pointer;
-      position: relative;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-      transition: transform 0.15s cubic-bezier(0.2, 0, 0.1, 1), box-shadow 0.15s ease;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      outline: none;
     }
-    .swatch-btn:hover {
+    .swatch:hover {
+      transform: scale(1.1);
+    }
+    .swatch.active {
+      border-color: #111114;
       transform: scale(1.08);
     }
-    .swatch-btn.active {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 0 2px #1e1e1e;
-      transform: scale(1.05);
-    }
-    .swatch-violet {
-      background: linear-gradient(135deg, #b86bff, #8027e8);
-    }
-    .swatch-magenta {
-      background: linear-gradient(135deg, #ff4d9d, #e01a88);
-    }
-    .swatch-crimson {
-      background: linear-gradient(135deg, #ff2d7a, #d60b38);
-    }
-
     .divider {
       width: 1px;
-      height: 20px;
-      background: rgba(0, 0, 0, 0.1);
-      margin: 0 2px;
+      height: 24px;
+      background: rgba(17, 17, 20, 0.1);
     }
-    .pill-btn {
-      width: 32px;
-      height: 32px;
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn {
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       border: none;
-      background: #1e1e1e;
-      color: #ffffff;
+      background: rgba(17, 17, 20, 0.05);
+      color: #111114;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      transition: transform 0.15s ease, background-color 0.15s ease;
+      transition: background 0.2s ease, transform 0.15s ease;
+      outline: none;
     }
-    .pill-btn:hover {
-      transform: scale(1.06);
-      background: #333333;
+    .btn:hover {
+      background: rgba(17, 17, 20, 0.1);
+      transform: scale(1.05);
     }
-    .pill-btn svg {
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
+    .btn:active {
+      transform: scale(0.95);
     }
-
-    /* Fake cursor circle for scripted replay */
-    #fake-cursor {
-      position: absolute;
+    .fake-cursor {
+      position: fixed;
       top: 0;
       left: 0;
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.65);
-      border: 1.5px solid rgba(0, 0, 0, 0.35);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid rgba(17, 17, 20, 0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       pointer-events: none;
-      z-index: 100;
+      z-index: 1000;
       transform: translate(-50%, -50%);
-      transition: width 0.12s ease, height 0.12s ease, background 0.12s ease;
-      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    #fake-cursor.down {
-      width: 17px;
-      height: 17px;
-      background: rgba(220, 220, 220, 0.85);
-      border-color: rgba(0, 0, 0, 0.6);
+    .fake-cursor.visible {
+      opacity: 1;
     }
   </style>
 
   <script type="importmap">
     {
       "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
       }
     }
   </script>
 </head>
 <body>
-  <div class="bg-rings">
-    <div class="ring ring-1"></div>
-    <div class="ring ring-2"></div>
-    <div class="ring ring-3"></div>
-    <div class="ring ring-4"></div>
-  </div>
+  <canvas class="ln-canvas" id="canvas"></canvas>
 
-  <div id="canvas-container"></div>
+  <div class="ui-layer">
+    <div class="header">
+      <h1>Liquid Glass Icon / three.js demo</h1>
+      <div class="subtitle">Advanced chat UI for AI models · created by Ann Nguyen</div>
+    </div>
 
-  <div class="header">
-    <div class="header-sub">Interactive 3D WebGL</div>
-    <div class="header-title">Liquid Glass Icon / three.js demo</div>
-    <div class="header-author">Dynamic Fluid &amp; Glass Simulation</div>
-  </div>
-
-  <div class="hint-text">Drag the glass to spin it · Tap it to slosh the liquid</div>
-
-  <div class="dock-wrapper">
-    <div class="dock">
-      <div class="swatches">
-        <button class="swatch-btn swatch-violet" data-theme="violet" title="Lavender Violet"></button>
-        <button class="swatch-btn swatch-magenta" data-theme="magenta" title="Hot Magenta"></button>
-        <button class="swatch-btn swatch-crimson active" data-theme="crimson" title="Hot Pink / Crimson"></button>
+    <div class="footer-container">
+      <div class="hint">Drag the glass to spin it · tap it to slosh the liquid</div>
+      <div class="dock">
+        <div class="swatches">
+          <button class="swatch active" data-color="0" style="background: linear-gradient(135deg, #d4157f, #ff6ec4);"></button>
+          <button class="swatch" data-color="1" style="background: linear-gradient(135deg, #b05bd5, #ea9ce4);"></button>
+          <button class="swatch" data-color="2" style="background: linear-gradient(135deg, #c40f2a, #fa243c);"></button>
+          <button class="swatch" data-color="3" style="background: linear-gradient(135deg, #6b21a8, #a855f7);"></button>
+        </div>
+        <div class="divider"></div>
+        <div class="actions">
+          <button class="btn" id="btnSpin" title="Toggle Auto-Spin (S)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          </button>
+          <button class="btn" id="btnSlosh" title="Slosh Liquid (W)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          </button>
+          <button class="btn" id="btnPause" title="Pause / Play Animation">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="pauseIcon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+        </div>
       </div>
-      <div class="divider"></div>
-      <button class="pill-btn" id="btn-sound" title="Toggle Sound">
-        <svg viewBox="0 0 24 24">
-          <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-2.5 9.77L7.83 9H4v6h3.83l3.67 4V5l-3.67 4z"/>
-        </svg>
-      </button>
-      <button class="pill-btn" id="btn-play" title="Pause / Play Tour">
-        <svg viewBox="0 0 24 24" id="play-pause-icon">
-          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-        </svg>
-      </button>
     </div>
   </div>
 
-  <div id="fake-cursor"></div>
+  <div id="fakeCursor" class="fake-cursor"></div>
 
   <script type="module">
     import * as THREE from 'three';
-    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-    // THEMES (Hot Pink default at t=0, with deeper saturated bottoms)
-    const THEMES = {
-      crimson: {
-        id: 'crimson',
-        coreHex: '#ff1f6d',
-        topHex: '#ffcce3',
-        bottomHex: '#450018',
-        highlightHex: '#ffffff',
-        index: 2
+    // Palettes matching tech spec
+    const PALETTES = [
+      { // 0: Y2K Pink
+        c0: [0.195, 0.0024, 0.061],
+        c1: [0.658, 0.0075, 0.212],
+        c2: [0.888, 0.045, 0.342],
+        c3: [1.000, 0.156, 0.552],
+        c4: [1.000, 0.651, 0.855]
       },
-      magenta: {
-        id: 'magenta',
-        coreHex: '#d60072',
-        topHex: '#ffb5e3',
-        bottomHex: '#38001d',
-        highlightHex: '#ffffff',
-        index: 1
+      { // 1: Lilac / Magenta
+        c0: [0.160, 0.0400, 0.280],
+        c1: [0.430, 0.1000, 0.670],
+        c2: [0.610, 0.1800, 0.720],
+        c3: [0.820, 0.3300, 0.770],
+        c4: [0.970, 0.7600, 0.910]
       },
-      violet: {
-        id: 'violet',
-        coreHex: '#8b24e4',
-        topHex: '#ebd1ff',
-        bottomHex: '#26004d',
-        highlightHex: '#ffffff',
-        index: 0
+      { // 2: Apple Music Red
+        c0: [0.112, 0.0012, 0.0052],
+        c1: [0.552, 0.0048, 0.0232],
+        c2: [0.956, 0.0176, 0.0452],
+        c3: [0.965, 0.1070, 0.1750],
+        c4: [1.000, 0.5390, 0.5840]
+      },
+      { // 3: Purple
+        c0: [0.080, 0.0020, 0.180],
+        c1: [0.280, 0.0100, 0.520],
+        c2: [0.480, 0.0400, 0.780],
+        c3: [0.680, 0.1500, 0.920],
+        c4: [0.880, 0.5200, 0.980]
       }
-    };
+    ];
 
-    let currentThemeKey = 'crimson';
-    let currentTheme = THEMES[currentThemeKey];
-
-    // Query params
+    // Check query params
     const urlParams = new URLSearchParams(window.location.search);
     const isRenderMode = urlParams.has('render');
 
-    // Scene & Renderer
-    const container = document.getElementById('canvas-container');
+    // Canvas & Setup
+    const canvas = document.getElementById('canvas');
+    let dpr = isRenderMode ? 1.0 : Math.min(window.devicePixelRatio, 1.5);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: false,
+      alpha: false,
+      powerPreference: 'high-performance',
+      preserveDrawingBuffer: true
+    });
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 100);
-    // Base camera z distance scaled so icon fills ~45% viewport height in 1480x1080
-    const BASE_CAMERA_Z = 6.8;
-    camera.position.set(0, 0, BASE_CAMERA_Z);
+    // Shader Material & Fullscreen Quad
+    const fragmentShader = `
+      precision highp float;
+      vec2 rot2D(vec2 p, float a){ float c=cos(a), s=sin(a); return mat2(c, s, -s, c)*p; }
+      uniform vec2 uResolution;
+      uniform float uTime;
+      uniform vec2 uRotation;
+      uniform float uZoom;
+      
+      uniform vec3 uColor0;
+      uniform vec3 uColor1;
+      uniform vec3 uColor2;
+      uniform vec3 uColor3;
+      uniform vec3 uColor4;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xe6e6e6, 1.0);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
-    container.appendChild(renderer.domElement);
+      uniform vec2 uSloshAngle;
+      uniform float uWaveModes[8];
 
-    // Environment map
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    pmremGenerator.compileEquirectangularShader();
-    const roomEnv = new RoomEnvironment();
-    const envTexture = pmremGenerator.fromScene(roomEnv, 0.04).texture;
-    scene.environment = envTexture;
+      uniform vec3 uNoteOffset;
+      uniform float uNoteStretch;
 
-    // Lights - Boosted directional rim and key lights for crisp glass bevel highlights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-    scene.add(ambientLight);
+      varying vec2 vUv;
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 3.2);
-    dirLight1.position.set(5, 7, 6);
-    scene.add(dirLight1);
+      float smin(float a, float b, float k) {
+        float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
+        return mix(b, a, h) - k * h * (1.0 - h);
+      }
 
-    const dirLight2 = new THREE.DirectionalLight(0xcce6ff, 2.0);
-    dirLight2.position.set(-6, 4, 5);
-    scene.add(dirLight2);
+      // 2D Note Glyph SDF
+      float sdGlyph(vec2 p) {
+        mat2 rotH = mat2(0.8387, 0.5446, -0.5446, 0.8387);
+        
+        vec2 pL = rotH * (p - vec2(-0.181, -0.266));
+        float hL = (length(pL / vec2(0.108, 0.079)) - 1.0) * 0.079;
+        
+        vec2 pR = rotH * (p - vec2(0.142, -0.153));
+        float hR = (length(pR / vec2(0.108, 0.079)) - 1.0) * 0.079;
+        
+        vec2 sLq = abs(p - vec2(-0.0926, -0.02)) - vec2(0.0181, 0.22);
+        float sL = length(max(sLq, 0.0)) + min(max(sLq.x, sLq.y), 0.0);
+        
+        vec2 sRq = abs(p - vec2(0.2285, 0.10)) - vec2(0.019, 0.23);
+        float sR = length(max(sRq, 0.0)) + min(max(sRq.x, sRq.y), 0.0);
+        
+        vec2 bCenter = vec2(0.0684, 0.255);
+        vec2 bq = rot2D(p - bCenter, -0.35);
+        vec2 bqExt = abs(bq) - vec2(0.18, 0.038);
+        float beam = length(max(bqExt, 0.0)) + min(max(bqExt.x, bqExt.y), 0.0);
+        
+        float heads = min(hL, hR);
+        float stems = min(sL, sR);
+        float glyph = smin(heads, stems, 0.03);
+        return smin(glyph, beam, 0.025);
+      }
 
-    const backLight = new THREE.DirectionalLight(0xffffff, 2.5);
-    backLight.position.set(-2, -4, -5);
-    scene.add(backLight);
 
-    // Root Icon Pivot
-    const iconRoot = new THREE.Group();
-    scene.add(iconRoot);
+      float sdNote3D(vec3 p) {
+        vec3 np = p;
+        np.xy -= uNoteOffset.xy;
+        np.y /= (1.0 + uNoteStretch);
+        float d2d = sdGlyph(np.xy);
+        float dZ = abs(np.z - uNoteOffset.z - 0.035) - 0.03;
+        return length(max(vec2(d2d, dZ), 0.0)) - 0.018;
+      }
 
-    // Helper: Squircle Path
-    function createSquircleShape(size, radius) {
-      const shape = new THREE.Shape();
-      const x = -size / 2;
-      const y = -size / 2;
-      const w = size;
-      const h = size;
-      const r = radius;
+      float sdGlass(vec3 p) {
+        vec3 q = abs(p) - vec3(0.43 - 0.10, 0.43 - 0.10, 0.12 - 0.04);
+        float r2d = length(max(q.xy, 0.0)) + min(max(q.x, q.y), 0.0) - 0.10;
+        vec2 d2z = vec2(r2d, max(q.z, 0.0));
+        return length(max(d2z, 0.0)) + min(max(d2z.x, d2z.y), 0.0) - 0.04;
+      }
 
-      shape.moveTo(x + r, y);
-      shape.lineTo(x + w - r, y);
-      shape.quadraticCurveTo(x + w, y, x + w, y + r);
-      shape.lineTo(x + w, y + h - r);
-      shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      shape.lineTo(x + r, y + h);
-      shape.quadraticCurveTo(x, y + h, x, y + h - r);
-      shape.lineTo(x, y + r);
-      shape.quadraticCurveTo(x, y, x + r, y);
-      return shape;
-    }
+      float sdPocket(vec3 p) {
+        vec3 q = p - vec3(0.0, 0.0, -0.0725);
+        vec3 box = abs(q) - vec3(0.36 - 0.04, 0.36 - 0.04, 0.0575 - 0.02);
+        float r2d = length(max(box.xy, 0.0)) + min(max(box.x, box.y), 0.0) - 0.04;
+        vec2 d2z = vec2(r2d, max(box.z, 0.0));
+        return length(max(d2z, 0.0)) + min(max(d2z.x, d2z.y), 0.0) - 0.02;
+      }
 
-    // 1. CLEAR GLASS SLAB with thicker, clearer bevel & crisp bright white edge highlight
-    const glassWidth = 2.0;
-    const glassRadius = 0.50;
-    const glassExtrudeDepth = 0.28;
-    const glassBevel = 0.09; // Thicker bevel! Total thickness = 0.28 + 2*0.09 = 0.46
-    const outerShape = createSquircleShape(glassWidth, glassRadius);
+      float getLiquidSurf(vec2 xy) {
+        float z = 0.04 + uSloshAngle.x * xy.x * 1.6 + uSloshAngle.y * 0.05;
+        float phase = (xy.x + 0.43) / 0.86 * 3.14159265;
+        z += uWaveModes[0] * sin(phase);
+        z += uWaveModes[1] * sin(phase * 2.0);
+        z += uWaveModes[2] * sin(phase * 3.0);
+        z += uWaveModes[3] * sin(phase * 4.0);
+        return z;
+      }
 
-    const glassExtrudeSettings = {
-      depth: glassExtrudeDepth,
-      bevelEnabled: true,
-      bevelSegments: 10,
-      steps: 1,
-      bevelSize: glassBevel,
-      bevelThickness: glassBevel
+      float sdLiquid(vec3 p) {
+        float pock = sdPocket(p);
+        float surf = p.y - getLiquidSurf(p.xy);
+        return max(pock, surf);
+      }
+
+      vec3 studio(vec3 d) {
+        float bgT = smoothstep(-0.6, 0.8, d.y);
+        vec3 bg = mix(vec3(0.46, 0.46, 0.48), vec3(0.90, 0.90, 0.92), bgT);
+        bg *= mix(1.0, 0.32, clamp(-d.z, 0.0, 1.0));
+        
+        vec3 keyDir = normalize(vec3(-0.62, 0.55, 0.56));
+        float key = smoothstep(0.14, 0.0, length(d - keyDir * dot(d, keyDir)));
+        bg += vec3(2.6) * key * max(dot(d, keyDir), 0.0);
+        
+        vec3 rimDir = normalize(vec3(0.86, 0.18, 0.48));
+        float rim = smoothstep(0.06, 0.0, length(d - rimDir * dot(d, rimDir)));
+        bg += vec3(1.9, 1.95, 2.0) * rim * max(dot(d, rimDir), 0.0);
+        
+        vec3 topDir = normalize(vec3(0.05, 0.78, -0.62));
+        float top = smoothstep(0.10, 0.0, length(d - topDir * dot(d, topDir)));
+        bg += vec3(2.2) * top * max(dot(d, topDir), 0.0);
+        return bg;
+      }
+
+      vec3 getLiquidColor(float depth, float facing) {
+        float t = clamp(0.62 - depth * 3.0, 0.25, 0.62);
+        vec3 col;
+        if (t < 0.25) col = mix(uColor0, uColor1, t / 0.25);
+        else if (t < 0.5) col = mix(uColor1, uColor2, (t - 0.25) / 0.25);
+        else if (t < 0.75) col = mix(uColor2, uColor3, (t - 0.5) / 0.25);
+        else col = mix(uColor3, uColor4, (t - 0.75) / 0.25);
+        
+        float fresnel = 0.04 + 0.4 * pow(1.0 - max(facing, 0.0), 5.0);
+        col += vec3(fresnel);
+        return col;
+      }
+
+      vec3 getGlassNormal(vec3 p) {
+        vec2 e = vec2(0.001, 0.0);
+        return normalize(vec3(
+          sdGlass(p + e.xyy) - sdGlass(p - e.xyy),
+          sdGlass(p + e.yxy) - sdGlass(p - e.yxy),
+          sdGlass(p + e.yyx) - sdGlass(p - e.yyx)
+        ));
+      }
+
+      vec3 getNoteNormal(vec3 p) {
+        vec2 e = vec2(0.001, 0.0);
+        return normalize(vec3(
+          sdNote3D(p + e.xyy) - sdNote3D(p - e.xyy),
+          sdNote3D(p + e.yxy) - sdNote3D(p - e.yxy),
+          sdNote3D(p + e.yyx) - sdNote3D(p - e.yyx)
+        ));
+      }
+
+      vec3 getLiquidNormal(vec3 p) {
+        vec2 e = vec2(0.001, 0.0);
+        return normalize(vec3(
+          sdLiquid(p + e.xyy) - sdLiquid(p - e.xyy),
+          sdLiquid(p + e.yxy) - sdLiquid(p - e.yxy),
+          sdLiquid(p + e.yyx) - sdLiquid(p - e.yyx)
+        ));
+      }
+
+      void main() {
+        vec2 st = (gl_FragCoord.xy - 0.5 * uResolution) / min(uResolution.x, uResolution.y);
+        st /= uZoom;
+
+        vec3 ro = vec3(st * 1.5, 2.5);
+        vec3 rd = normalize(vec3(0.0, 0.0, -1.0));
+
+        float cy = cos(uRotation.y), sy = sin(uRotation.y);
+        float cx = cos(uRotation.x), sx = sin(uRotation.x);
+        mat3 rotY = mat3(cy, 0.0, sy, 0.0, 1.0, 0.0, -sy, 0.0, cy);
+        mat3 rotX = mat3(1.0, 0.0, 0.0, 0.0, cx, -sx, 0.0, sx, cx);
+        mat3 rot = rotX * rotY;
+
+        ro = rot * ro;
+        rd = rot * rd;
+
+        float t = 0.0;
+        float dGlass = 100.0;
+        vec3 pHit = ro;
+        for (int i = 0; i < 48; i++) {
+          pHit = ro + rd * t;
+          dGlass = sdGlass(pHit);
+          if (dGlass < 0.001 || t > 8.0) break;
+          t += dGlass;
+        }
+
+        vec3 finalColor = vec3(0.0);
+
+        if (dGlass < 0.001) {
+          vec3 N1 = getGlassNormal(pHit);
+          vec3 R_refl = reflect(rd, N1);
+          float cosTheta = clamp(dot(-rd, N1), 0.0, 1.0);
+          float F1 = 0.04 + 0.96 * pow(1.0 - cosTheta, 5.0);
+          vec3 specRefl = studio(R_refl);
+
+          float iors[3];
+          iors[0] = 1.465;
+          iors[1] = 1.500;
+          iors[2] = 1.535;
+
+          vec3 refrColor = vec3(0.0);
+
+          for (int ch = 0; ch < 3; ch++) {
+            vec3 rdIn = refract(rd, N1, 1.0 / iors[ch]);
+            vec3 pIn = pHit + rdIn * 0.004;
+
+            float tIn = 0.0;
+            vec3 chCol = vec3(0.0);
+
+            for (int j = 0; j < 36; j++) {
+              vec3 pCurr = pIn + rdIn * tIn;
+
+              float dNote = sdNote3D(pCurr);
+              if (dNote < 0.001) {
+                vec3 nNote = getNoteNormal(pCurr);
+                vec3 rNote = reflect(rdIn, nNote);
+                float fNote = 0.04 + 0.5 * pow(1.0 - clamp(dot(-rdIn, nNote), 0.0, 1.0), 5.0);
+                chCol = vec3(0.004) + studio(rNote) * fNote * 0.55;
+                break;
+              }
+
+              float dLiq = sdLiquid(pCurr);
+              if (dLiq < 0.001) {
+                vec3 nLiq = getLiquidNormal(pCurr);
+                float facing = clamp(dot(-rdIn, nLiq), 0.0, 1.0);
+                chCol = getLiquidColor(tIn, facing);
+                break;
+              }
+
+              float dExit = -sdGlass(pCurr);
+              if (dExit < 0.001) {
+                vec3 nExit = -getGlassNormal(pCurr);
+                vec3 rdOut = refract(rdIn, nExit, iors[ch]);
+                if (length(rdOut) < 0.1) rdOut = reflect(rdIn, nExit);
+                chCol = studio(rdOut);
+                break;
+              }
+
+              tIn += min(min(dNote, dLiq), max(dExit, 0.002));
+              if (tIn > 2.0) {
+                chCol = studio(rdIn);
+                break;
+              }
+            }
+
+            if (ch == 0) refrColor.r = chCol.r;
+            else if (ch == 1) refrColor.g = chCol.g;
+            else refrColor.b = chCol.b;
+          }
+
+          finalColor = mix(refrColor, specRefl, F1);
+        } else {
+          vec2 bgUv = st;
+          float distSq = dot(bgUv, bgUv);
+          float ring = sin(sqrt(distSq) * 70.0 - uTime * 1.032) * 0.015;
+          vec3 bgCol = mix(vec3(0.85, 0.85, 0.87), vec3(0.72, 0.72, 0.75), clamp(distSq * 0.8, 0.0, 1.0));
+          finalColor = bgCol + vec3(ring);
+        }
+
+        finalColor = finalColor / (1.0 + max(finalColor - vec3(0.85), vec3(0.0)) * 0.9);
+        finalColor = pow(clamp(finalColor, 0.0, 1.0), vec3(1.0 / 2.2));
+
+        gl_FragColor = vec4(finalColor, 1.0);
+      }
+    `;
+
+    const vertexShader = `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = vec4(position, 1.0);
+      }
+    `;
+
+    const material = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms: {
+        uResolution: { value: new THREE.Vector2(window.innerWidth * dpr, window.innerHeight * dpr) },
+        uTime: { value: 0 },
+        uRotation: { value: new THREE.Vector2(0.244, 0.262) }, // Pitch 14 deg, Yaw 15 deg
+        uZoom: { value: 1.0 },
+        uColor0: { value: new THREE.Vector3(...PALETTES[0].c0) },
+        uColor1: { value: new THREE.Vector3(...PALETTES[0].c1) },
+        uColor2: { value: new THREE.Vector3(...PALETTES[0].c2) },
+        uColor3: { value: new THREE.Vector3(...PALETTES[0].c3) },
+        uColor4: { value: new THREE.Vector3(...PALETTES[0].c4) },
+        uSloshAngle: { value: new THREE.Vector2(0, 0) },
+        uWaveModes: { value: new Float32Array(8) },
+        uNoteOffset: { value: new THREE.Vector3(0, 0, 0) },
+        uNoteStretch: { value: 0.0 }
+      }
+    });
+
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+    scene.add(mesh);
+
+    // State
+    const state = {
+      rotX: 0.244,
+      rotY: 0.262,
+      velX: 0,
+      velY: 0,
+      autoSpin: true,
+      paused: false,
+      
+      noteSway: 0, noteSwayV: 0,
+      noteStretch: 0, noteStretchV: 0,
+      noteLag: 0, noteLagV: 0,
+
+      sloshX: 0, sloshXV: 0,
+      sloshY: 0, sloshYV: 0,
+      waveModes: new Float32Array(8),
+      waveVel: new Float32Array(8),
+
+      colorIndex: 0,
+      zoom: 1.0,
+      
+      tourActive: true,
+      userInteracted: false,
+      tourTime: 0,
+      dragging: false
     };
 
-    const glassGeometry = new THREE.ExtrudeGeometry(outerShape, glassExtrudeSettings);
-    glassGeometry.center();
-
-    const glassMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.25,
-      roughness: 0.03,
-      metalness: 0.05,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.03,
-      reflectivity: 0.98,
-      ior: 1.52,
-      specularIntensity: 1.5,
-      specularColor: new THREE.Color(0xffffff),
-      iridescence: 0.5,
-      iridescenceIOR: 1.3,
-      iridescenceThicknessRange: [100, 400],
-      depthWrite: false,
-      side: THREE.DoubleSide
-    });
-
-    const glassMesh = new THREE.Mesh(glassGeometry, glassMaterial);
-    glassMesh.renderOrder = 10;
-    iconRoot.add(glassMesh);
-
-    // Crisp bright white rim highlight on glass bevel edges
-    const glassEdgesGeom = new THREE.EdgesGeometry(glassGeometry, 20);
-    const glassEdgeMat = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.75,
-      linewidth: 1.5
-    });
-    const glassEdges = new THREE.LineSegments(glassEdgesGeom, glassEdgeMat);
-    glassMesh.add(glassEdges);
-
-    // 2. LIQUID MESH (~55% height fill, glossy top highlight band, deep saturated bottom)
-    const innerW = 1.68;
-    const fillH = 0.924; // Exactly ~55% of inner cavity height (1.68)
-    const innerD = 0.38;
-    const cornerR = 0.35;
-
-    const liquidGeom = new THREE.BoxGeometry(innerW, fillH, innerD, 40, 24, 20);
-    // Center liquid at Y = -0.378 to fill bottom 55% of cavity
-    liquidGeom.translate(0, -0.378, 0);
-
-    const posAttr = liquidGeom.attributes.position;
-    const origPositions = new Float32Array(posAttr.array.length);
-    origPositions.set(posAttr.array);
-
-    const colors = new Float32Array(posAttr.count * 3);
-    liquidGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    // Deform side vertices to match inner squircle radius
-    const hx = innerW * 0.5;
-    const hy = 0.84; // cavity half height
-    for (let i = 0; i < posAttr.count; i++) {
-      let x = posAttr.getX(i);
-      let y = posAttr.getY(i);
-
-      const cx = Math.max(-(hx - cornerR), Math.min(hx - cornerR, x));
-      const cy = Math.max(-(hy - cornerR), Math.min(hy - cornerR, y));
-      const dx = x - cx;
-      const dy = y - cy;
-      const dist = Math.hypot(dx, dy);
-
-      if (dist > cornerR) {
-        x = cx + (dx / dist) * cornerR;
-        y = cy + (dy / dist) * cornerR;
-        posAttr.setXY(i, x, y);
-      }
-    }
-    posAttr.needsUpdate = true;
-    origPositions.set(posAttr.array);
-
-    const liquidMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color(currentTheme.coreHex),
-      vertexColors: true,
-      roughness: 0.05,
-      metalness: 0.0,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.02,
-      transmission: 0.15,
-      opacity: 0.96,
-      transparent: true,
-      emissive: new THREE.Color(currentTheme.coreHex),
-      emissiveIntensity: 0.22,
-      depthWrite: true
-    });
-
-    const liquidMesh = new THREE.Mesh(liquidGeom, liquidMaterial);
-    liquidMesh.renderOrder = 1;
-    iconRoot.add(liquidMesh);
-
-    // 3. MUSIC NOTE (Solid glossy black IN FRONT of liquid, higher renderOrder, depthTest true, opaque)
-    // Note spans ~65% of icon width (~1.30) and ~70% height (~1.40), centered slightly up
-    function createOvalShape(cx, cy, rx, ry, angle) {
-      const shape = new THREE.Shape();
-      const cosA = Math.cos(angle);
-      const sinA = Math.sin(angle);
-      const segs = 32;
-      for (let i = 0; i <= segs; i++) {
-        const theta = (i / segs) * Math.PI * 2;
-        const px = rx * Math.cos(theta);
-        const py = ry * Math.sin(theta);
-        const x = cx + px * cosA - py * sinA;
-        const y = cy + px * sinA + py * cosA;
-        if (i === 0) shape.moveTo(x, y);
-        else shape.lineTo(x, y);
-      }
-      return shape;
-    }
-
-    const noteGroup = new THREE.Group();
-    const noteMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x050508,
-      roughness: 0.10,
-      metalness: 0.85,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.04,
-      reflectivity: 0.95,
-      opacity: 1.0,
-      transparent: false,
-      depthTest: true,
-      depthWrite: true
-    });
-
-    const noteExtrudeSettings = {
-      depth: 0.10,
-      bevelEnabled: true,
-      bevelThickness: 0.02,
-      bevelSize: 0.02,
-      bevelSegments: 4,
-      steps: 1
-    };
-
-    const tiltAngle = -0.32;
-    const head1Shape = createOvalShape(-0.36, -0.32, 0.20, 0.13, tiltAngle);
-    const head2Shape = createOvalShape(0.28, -0.12, 0.20, 0.13, tiltAngle);
-
-    const stemsBeamShape = new THREE.Shape();
-    const sw = 0.07;
-    stemsBeamShape.moveTo(-0.24 - sw, -0.30);
-    stemsBeamShape.lineTo(-0.24, -0.30);
-    stemsBeamShape.lineTo(-0.24, 0.48);
-    stemsBeamShape.lineTo(0.42, 0.68);
-    stemsBeamShape.lineTo(0.42, -0.10);
-    stemsBeamShape.lineTo(0.42 + sw, -0.10);
-    stemsBeamShape.lineTo(0.42 + sw, 0.86);
-    stemsBeamShape.lineTo(-0.24 - sw, 0.66);
-    stemsBeamShape.closePath();
-
-    const gHead1 = new THREE.ExtrudeGeometry(head1Shape, noteExtrudeSettings);
-    const gHead2 = new THREE.ExtrudeGeometry(head2Shape, noteExtrudeSettings);
-    const gStems = new THREE.ExtrudeGeometry(stemsBeamShape, noteExtrudeSettings);
-
-    const mHead1 = new THREE.Mesh(gHead1, noteMaterial);
-    const mHead2 = new THREE.Mesh(gHead2, noteMaterial);
-    const mStems = new THREE.Mesh(gStems, noteMaterial);
-
-    noteGroup.add(mHead1);
-    noteGroup.add(mHead2);
-    noteGroup.add(mStems);
-
-    // Scale note to span ~65% icon width and ~70% height, placed at front half of slab (Z = 0.08)
-    noteGroup.scale.set(1.12, 1.12, 1.0);
-    noteGroup.position.set(0.02, 0.06, 0.08);
-    noteGroup.renderOrder = 5; // Rendered after liquid so it stays crisp black in front
-    iconRoot.add(noteGroup);
-
-    // Initial icon rotation
-    iconRoot.rotation.set(-0.08, 0.15, -0.05);
-
-    // SPRING-DAMPER SLOSH SIMULATION
-    class SloshPhysics {
-      constructor() {
-        this.currentTilt = new THREE.Vector2(0, 0);
-        this.tiltVelocity = new THREE.Vector2(0, 0);
-        this.stiffness = 42.0;
-        this.damping = 5.2;
-        this.impulseWave = 0.0;
-        this.waveTime = 0.0;
-      }
-
-      reset() {
-        this.currentTilt.set(0, 0);
-        this.tiltVelocity.set(0, 0);
-        this.impulseWave = 0.0;
-        this.waveTime = 0.0;
-      }
-
-      step(dt, iconRotMatrix, angVel) {
-        this.waveTime += dt;
-
-        const invRot = iconRotMatrix.clone().invert();
-        const worldDown = new THREE.Vector3(0, -1, 0);
-        const localDown = worldDown.applyMatrix4(invRot);
-        const targetNormal = localDown.clone().negate().normalize();
-
-        const targetTiltX = THREE.MathUtils.clamp(-targetNormal.x * 1.4 - angVel.y * 0.4, -0.85, 0.85);
-        const targetTiltZ = THREE.MathUtils.clamp(-targetNormal.z * 1.4 + angVel.x * 0.4, -0.85, 0.85);
-
-        const forceX = (targetTiltX - this.currentTilt.x) * this.stiffness - this.tiltVelocity.x * this.damping;
-        const forceZ = (targetTiltZ - this.currentTilt.y) * this.stiffness - this.tiltVelocity.y * this.damping;
-
-        this.tiltVelocity.x += forceX * dt;
-        this.tiltVelocity.y += forceZ * dt;
-
-        this.currentTilt.x += this.tiltVelocity.x * dt;
-        this.currentTilt.y += this.tiltVelocity.y * dt;
-
-        this.impulseWave = Math.max(0.0, this.impulseWave - dt * 1.6);
-      }
-
-      addImpulse(magnitude) {
-        this.tiltVelocity.x += (Math.random() - 0.5) * magnitude * 8.0;
-        this.tiltVelocity.y += (Math.random() - 0.5) * magnitude * 8.0;
-        this.impulseWave = Math.min(0.12, this.impulseWave + magnitude * 0.15);
-      }
-
-      getNormal() {
-        return new THREE.Vector3(this.currentTilt.x, 1.0, this.currentTilt.y).normalize();
-      }
-    }
-
-    const sloshSim = new SloshPhysics();
-
-    // Update liquid surface mesh deformation & vertex gradient colors
-    function updateLiquidMesh() {
-      const norm = sloshSim.getNormal();
-      const tiltX = norm.x;
-      const tiltZ = norm.z;
-      const waveT = sloshSim.waveTime;
-      const amp = 0.025 + sloshSim.impulseWave;
-
-      const cCore = new THREE.Color(currentTheme.coreHex);
-      const cTop = new THREE.Color(currentTheme.topHex);
-      const cBot = new THREE.Color(currentTheme.bottomHex);
-      const cHighlight = new THREE.Color(currentTheme.highlightHex);
-
-      const positions = posAttr.array;
-      const colAttr = liquidGeom.attributes.color;
-      const colArray = colAttr.array;
-
-      for (let i = 0; i < posAttr.count; i++) {
-        const idx = i * 3;
-        const x0 = origPositions[idx];
-        const y0 = origPositions[idx + 1];
-        const z0 = origPositions[idx + 2];
-
-        // Slosh wave displacement on top surface vertices
-        if (y0 > -0.1) {
-          const wave = Math.sin(x0 * 6.0 + z0 * 4.0 + waveT * 5.0) * amp +
-                     Math.cos(x0 * 3.5 - z0 * 5.0 + waveT * 4.0) * (amp * 0.65);
-          const dy = -(tiltX * x0 + tiltZ * z0) * 0.82 + wave;
-          positions[idx + 1] = y0 + dy;
-        } else {
-          positions[idx + 1] = y0;
-        }
-
-        // Vertical gradient: deep saturated bottom, rich core, crisp glossy white highlight band near top
-        const normY = THREE.MathUtils.clamp((positions[idx + 1] - (-0.84)) / 0.924, 0.0, 1.0);
-        let vColor = new THREE.Color();
-        if (normY > 0.82) {
-          // Strong glossy highlight band near liquid surface
-          const t = (normY - 0.82) / 0.18;
-          vColor.lerpColors(cTop, cHighlight, t * 0.85);
-        } else {
-          vColor.lerpColors(cBot, cCore, Math.pow(normY / 0.82, 0.75));
-        }
-
-        colArray[idx] = vColor.r;
-        colArray[idx + 1] = vColor.g;
-        colArray[idx + 2] = vColor.b;
-      }
-
-      posAttr.needsUpdate = true;
-      colAttr.needsUpdate = true;
-
-      liquidMaterial.color.copy(cCore);
-      liquidMaterial.emissive.copy(cCore);
-    }
-
-    // Theme switching
-    function setTheme(themeKey) {
-      if (!THEMES[themeKey]) return;
-      currentThemeKey = themeKey;
-      currentTheme = THEMES[themeKey];
-
-      document.querySelectorAll('.swatch-btn').forEach(btn => {
-        if (btn.dataset.theme === themeKey) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
-
-      sloshSim.addImpulse(0.2);
-    }
-
-    // UI Swatches
-    document.querySelectorAll('.swatch-btn').forEach(btn => {
-      btn.addEventListener('pointerdown', (e) => {
-        e.stopPropagation();
-        isUserInteracting = true;
-        setTheme(btn.dataset.theme);
-      });
-    });
-
-    const btnPlay = document.getElementById('btn-play');
-    const playPauseIcon = document.getElementById('play-pause-icon');
-    let tourPaused = false;
-
-    btnPlay.addEventListener('pointerdown', (e) => {
-      e.stopPropagation();
-      tourPaused = !tourPaused;
-      if (tourPaused) {
-        playPauseIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-      } else {
-        playPauseIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-        isUserInteracting = false;
-      }
-    });
-
-    // Interaction handling
-    let isUserInteracting = false;
-    let isPointerDown = false;
-    let lastPointerX = 0;
-    let lastPointerY = 0;
-    let angularVel = new THREE.Vector2(0, 0);
-    let lastFrameTime = performance.now();
-
-    const iconEuler = new THREE.Euler(-0.08, 0.15, -0.05, 'YXZ');
-    const iconQuaternion = new THREE.Quaternion().setFromEuler(iconEuler);
-
-    window.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.dock-wrapper') || e.target.closest('.header')) return;
-      isPointerDown = true;
-      isUserInteracting = true;
-      lastPointerX = e.clientX;
-      lastPointerY = e.clientY;
-      angularVel.set(0, 0);
-      sloshSim.addImpulse(0.25);
-    });
-
-    window.addEventListener('pointermove', (e) => {
-      if (!isPointerDown) return;
-      const dx = e.clientX - lastPointerX;
-      const dy = e.clientY - lastPointerY;
-      lastPointerX = e.clientX;
-      lastPointerY = e.clientY;
-
-      const rotSpeed = 0.007;
-      angularVel.x = dy * rotSpeed * 30.0;
-      angularVel.y = dx * rotSpeed * 30.0;
-
-      const deltaQuat = new THREE.Quaternion();
-      deltaQuat.setFromEuler(new THREE.Euler(dy * rotSpeed, dx * rotSpeed, 0, 'XYZ'));
-      iconQuaternion.premultiply(deltaQuat);
-    });
-
-    const endPointer = () => {
-      if (isPointerDown) {
-        isPointerDown = false;
-        sloshSim.addImpulse(0.15);
-      }
-    };
-    window.addEventListener('pointerup', endPointer);
-    window.addEventListener('pointercancel', endPointer);
-
-    function onResize() {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      camera.aspect = w / h;
-      if (camera.aspect < 1.0) {
-        camera.position.z = BASE_CAMERA_Z / (camera.aspect * 0.92);
-      } else {
-        camera.position.z = BASE_CAMERA_Z;
-      }
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    }
-    window.addEventListener('resize', onResize);
-    onResize();
-
-    // SCRIPTED TOUR (29.45s)
-    const TOUR_DURATION = 29.45;
-
-    function smoothstep(edge0, edge1, x) {
-      const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
-      return t * t * (3 - 2 * t);
-    }
-
-    function lerp(a, b, t) {
-      return a + (b - a) * t;
-    }
-
-    function getTourStateAt(t) {
-      const state = {
-        rotX: -0.08,
-        rotY: 0.15,
-        rotZ: -0.05,
-        zoom: BASE_CAMERA_Z,
-        theme: 'crimson',
-        cursorActive: false,
-        cursorDown: false,
-        cursorX: 0.5,
-        cursorY: 0.5,
-        impulse: 0.0
-      };
-
-      if (t < 2.0) {
-        state.theme = 'crimson';
-        state.rotX = -0.08 + Math.sin(t * 1.5) * 0.03;
-        state.rotY = 0.15 + Math.cos(t * 1.2) * 0.04;
-        const p = smoothstep(0.5, 1.8, t);
-        state.cursorActive = t > 0.4;
-        state.cursorX = lerp(0.68, 0.62, p);
-        state.cursorY = lerp(0.55, 0.48, p);
-        state.cursorDown = t >= 1.8;
-      } else if (t < 5.0) {
-        state.theme = 'crimson';
-        state.cursorActive = true;
-        state.cursorDown = true;
-        const p = smoothstep(2.0, 5.0, t);
-        state.cursorX = lerp(0.62, 0.38, p);
-        state.cursorY = lerp(0.48, 0.32, p);
-        state.rotX = lerp(-0.08, 0.42, p);
-        state.rotY = lerp(0.15, -0.95, p);
-        state.rotZ = lerp(-0.05, 0.28, p);
-      } else if (t < 8.5) {
-        state.theme = 'crimson';
-        const p = smoothstep(5.0, 8.5, t);
-        state.cursorActive = t < 7.0;
-        state.cursorDown = t < 6.2;
-        state.cursorX = lerp(0.38, 0.45, Math.min(1, (t - 5.0) / 1.5));
-        state.cursorY = lerp(0.32, 0.42, Math.min(1, (t - 5.0) / 1.5));
-        state.rotX = lerp(0.42, -0.15, p);
-        state.rotY = lerp(-0.95, 0.25, p);
-        state.rotZ = lerp(0.28, -0.08, p);
-      } else if (t < 10.5) {
-        state.theme = 'crimson';
-        const p = smoothstep(8.5, 9.4, t);
-        state.cursorActive = true;
-        state.cursorX = lerp(0.45, 0.52, p);
-        state.cursorY = lerp(0.42, 0.46, p);
-        state.cursorDown = t >= 9.3 && t <= 9.7;
-        if (t >= 9.35 && t <= 9.5) {
-          state.impulse = 0.4;
-          state.rotX = -0.15 + (t - 9.35) * 0.3;
-        } else {
-          state.rotX = -0.15;
-        }
-        state.rotY = 0.25;
-        state.rotZ = -0.08;
-      } else if (t < 12.0) {
-        const p = smoothstep(10.5, 11.4, t);
-        state.cursorActive = true;
-        state.cursorX = lerp(0.52, 0.50, p);
-        state.cursorY = lerp(0.46, 0.94, p);
-        state.cursorDown = t >= 11.2 && t <= 11.6;
-        state.theme = t >= 11.3 ? 'magenta' : 'crimson';
-        state.rotX = -0.12;
-        state.rotY = 0.22;
-        state.rotZ = -0.06;
-      } else if (t < 16.5) {
-        state.theme = 'magenta';
-        state.cursorActive = true;
-        const p = smoothstep(12.0, 16.5, t);
-        state.cursorDown = true;
-        state.cursorX = 0.50 + Math.sin((t - 12.0) * 1.8) * 0.18;
-        state.cursorY = 0.52 + Math.cos((t - 12.0) * 1.8) * 0.14;
-        state.rotX = lerp(-0.12, 0.65, p) + Math.sin(t * 2.0) * 0.15;
-        state.rotY = lerp(0.22, 1.85, p);
-        state.rotZ = lerp(-0.06, -0.45, p);
-      } else if (t < 20.5) {
-        state.theme = 'magenta';
-        const p = smoothstep(16.5, 19.0, t);
-        state.cursorActive = t < 18.5;
-        state.cursorDown = t < 17.8;
-        state.cursorX = lerp(0.50, 0.55, p);
-        state.cursorY = lerp(0.52, 0.50, p);
-        state.rotX = lerp(0.65, 0.05, p);
-        state.rotY = lerp(1.85, 1.57, p);
-        state.rotZ = lerp(-0.45, 0.0, p);
-        const zP = smoothstep(17.0, 19.0, t) * (1 - smoothstep(19.8, 20.5, t));
-        state.zoom = lerp(BASE_CAMERA_Z, BASE_CAMERA_Z * 0.88, zP);
-      } else if (t < 22.5) {
-        const p = smoothstep(20.5, 21.5, t);
-        state.cursorActive = true;
-        state.cursorX = lerp(0.55, 0.47, p);
-        state.cursorY = lerp(0.50, 0.94, p);
-        state.cursorDown = t >= 21.3 && t <= 21.8;
-        state.theme = t >= 21.4 ? 'violet' : 'magenta';
-        state.rotX = 0.05;
-        state.rotY = lerp(1.57, 0.8, smoothstep(20.5, 22.5, t));
-        state.rotZ = 0.0;
-      } else if (t <= TOUR_DURATION) {
-        state.theme = 'violet';
-        const p = (t - 22.5) / (TOUR_DURATION - 22.5);
-        state.cursorActive = t < 26.5;
-        state.cursorDown = t >= 22.8 && t <= 25.8;
-        state.cursorX = 0.47 + Math.cos(t * 1.5) * 0.15;
-        state.cursorY = 0.60 + Math.sin(t * 1.5) * 0.12;
-
-        const easeOut = 1 - Math.pow(1 - p, 2.5);
-        state.rotX = lerp(0.05, -0.08, easeOut) + Math.sin(t * 3.0) * (1 - easeOut) * 0.25;
-        state.rotY = lerp(0.8, 0.15 + Math.PI * 2, easeOut);
-        state.rotZ = lerp(0.0, -0.05, easeOut) + Math.cos(t * 2.5) * (1 - easeOut) * 0.18;
-      }
-
-      return state;
-    }
-
-    const ringEls = [
-      document.querySelector('.ring-1'),
-      document.querySelector('.ring-2'),
-      document.querySelector('.ring-3'),
-      document.querySelector('.ring-4')
-    ];
-
-    function updateRings(motionEnergy) {
-      ringEls.forEach((el, i) => {
-        if (!el) return;
-        const scale = 1.0 + motionEnergy * (0.05 + i * 0.03);
-        const opacity = Math.min(0.25, 0.04 + (4 - i) * 0.02 + motionEnergy * 0.08);
-        el.style.transform = `translate(-50%, -50%) scale(${scale})`;
-        el.style.opacity = opacity;
+    function setPalette(index) {
+      state.colorIndex = index % 4;
+      const p = PALETTES[state.colorIndex];
+      material.uniforms.uColor0.value.set(...p.c0);
+      material.uniforms.uColor1.value.set(...p.c1);
+      material.uniforms.uColor2.value.set(...p.c2);
+      material.uniforms.uColor3.value.set(...p.c3);
+      material.uniforms.uColor4.value.set(...p.c4);
+
+      document.querySelectorAll('.swatch').forEach((sw, idx) => {
+        sw.classList.toggle('active', idx === state.colorIndex);
       });
     }
 
-    const fakeCursorEl = document.getElementById('fake-cursor');
+    function triggerKnock() {
+      state.noteSwayV += (0.5 + 0.3 * Math.random()) * (Math.random() < 0.5 ? 1 : -1);
+      state.noteStretchV += 0.7 + 0.3 * Math.random();
+      state.noteLagV += 0.5 * (Math.random() < 0.5 ? 1 : -1);
 
-    function applyState(state) {
-      if (currentThemeKey !== state.theme) {
-        setTheme(state.theme);
-      }
+      state.sloshXV += (0.9 + 0.3 * Math.random()) * (Math.random() < 0.5 ? 1 : -1);
+      state.sloshYV += 0.6 * (Math.random() < 0.5 ? 1 : -1);
 
-      iconEuler.set(state.rotX, state.rotY, state.rotZ, 'YXZ');
-      iconQuaternion.setFromEuler(iconEuler);
-      iconRoot.quaternion.copy(iconQuaternion);
+      state.waveVel[0] += (0.9 + 0.3 * Math.random()) * (Math.random() < 0.5 ? 1 : -1);
+      state.waveVel[1] += 0.45;
+      state.waveVel[2] -= 0.5;
+      state.waveVel[3] += 0.15;
 
-      if (camera.aspect < 1.0) {
-        camera.position.z = state.zoom / (camera.aspect * 0.92);
-      } else {
-        camera.position.z = state.zoom;
-      }
-      camera.updateProjectionMatrix();
+      state.velX += 0.8 * (Math.random() < 0.5 ? 1 : -1);
+    }
 
-      if (state.cursorActive) {
-        fakeCursorEl.style.display = 'block';
-        fakeCursorEl.style.left = `${state.cursorX * window.innerWidth}px`;
-        fakeCursorEl.style.top = `${state.cursorY * window.innerHeight}px`;
-        if (state.cursorDown) {
-          fakeCursorEl.classList.add('down');
-        } else {
-          fakeCursorEl.classList.remove('down');
-        }
-      } else {
-        fakeCursorEl.style.display = 'none';
+    function resetPhysicsState() {
+      state.rotX = 0.244;
+      state.rotY = 0.262;
+      state.velX = 0;
+      state.velY = 0;
+      state.autoSpin = true;
+      state.noteSway = 0; state.noteSwayV = 0;
+      state.noteStretch = 0; state.noteStretchV = 0;
+      state.noteLag = 0; state.noteLagV = 0;
+      state.sloshX = 0; state.sloshXV = 0;
+      state.sloshY = 0; state.sloshYV = 0;
+      state.zoom = 1.0;
+      for (let i = 0; i < 8; i++) {
+        state.waveModes[i] = 0;
+        state.waveVel[i] = 0;
       }
     }
 
-    // DETERMINISTIC SEEK FOR HEADLESS EVAL & REPLAY
+    function stepPhysics(dt) {
+      if (state.autoSpin) {
+        state.rotY += 1.422 * dt;
+      } else if (!state.dragging) {
+        let targetY = Math.round(state.rotY / (Math.PI * 2)) * Math.PI * 2;
+        let errY = state.rotY - targetY;
+        let accY = -9.0 * errY - 5.5 * state.velY;
+        state.velY += accY * dt;
+        state.rotY += state.velY * dt;
+      }
+
+      if (!state.dragging) {
+        let accX = -26.0 * state.rotX - 6.0 * state.velX;
+        state.velX += accX * dt;
+        state.rotX += state.velX * dt;
+        state.rotX = Math.max(-0.6, Math.min(0.6, state.rotX));
+      }
+
+      let angAccY = state.velY;
+
+      let sloshAccX = -18.0 * state.sloshX - 3.5 * state.sloshXV + angAccY * 0.15;
+      state.sloshXV += sloshAccX * dt;
+      state.sloshX += state.sloshXV * dt;
+
+      let sloshAccY = -18.0 * state.sloshY - 3.5 * state.sloshYV + state.rotX * 2.0;
+      state.sloshYV += sloshAccY * dt;
+      state.sloshY += state.sloshYV * dt;
+
+      for (let m = 0; m < 8; m++) {
+        let km = (m + 1) * Math.PI / 0.86;
+        let freq = Math.sqrt(11.0 * km * Math.tanh(km * 0.115));
+        let damp = Math.min(0.14 * Math.pow(m + 2, 1.3), 1.2);
+        let drive = Math.sin(2.0 * state.rotY - 0.9 * m) * [0.035, 0.055, 0.035, 0.018, 0.01, 0.008, 0.005, 0.003][m];
+        let acc = -freq * freq * state.waveModes[m] - damp * state.waveVel[m] + drive * angAccY * 5.0;
+        state.waveVel[m] += acc * dt;
+        state.waveModes[m] += state.waveVel[m] * dt;
+      }
+
+      let swayAcc = -90.0 * state.noteSway - 2.6 * state.noteSwayV - angAccY * 0.3;
+      state.noteSwayV += swayAcc * dt;
+      state.noteSway += state.noteSwayV * dt;
+
+      let stretchAcc = -120.0 * state.noteStretch - 3.4 * state.noteStretchV + Math.abs(angAccY) * 0.1;
+      state.noteStretchV += stretchAcc * dt;
+      state.noteStretch += state.noteStretchV * dt;
+
+      let lagAcc = -70.0 * state.noteLag - 2.4 * state.noteLagV + state.velX * 0.2;
+      state.noteLagV += lagAcc * dt;
+      state.noteLag += state.noteLagV * dt;
+    }
+
+    // Deterministic Tour Script Drivers
+    const fakeCursor = document.getElementById('fakeCursor');
+
+    function applyTourDrivers(t) {
+      const PERIOD = 29.45;
+      let cycleT = t % PERIOD;
+
+      // Color switches
+      let colIdx = 0;
+      if (cycleT >= 24.0) colIdx = 3;
+      else if (cycleT >= 19.0) colIdx = 3;
+      else if (cycleT >= 13.0) colIdx = 2;
+      else if (cycleT >= 8.0) colIdx = 1;
+      setPalette(colIdx);
+
+      // Zoom
+      if (cycleT >= 14.0 && cycleT <= 18.0) {
+        state.zoom = 1.0 + 0.35 * Math.sin((cycleT - 14.0) / 4.0 * Math.PI);
+      } else {
+        state.zoom = 1.0;
+      }
+
+      // Cursor & Knock Trigger events
+      let cursorX = window.innerWidth * 0.5;
+      let cursorY = window.innerHeight * 0.5;
+      let cursorVisible = false;
+
+      if (cycleT >= 2.0 && cycleT <= 5.0) {
+        cursorVisible = true;
+        let prog = (cycleT - 2.0) / 3.0;
+        cursorX = window.innerWidth * (0.4 + 0.3 * Math.sin(prog * Math.PI));
+        cursorY = window.innerHeight * (0.5 + 0.1 * Math.cos(prog * Math.PI));
+      } else if (cycleT >= 8.0 && cycleT <= 9.5) {
+        cursorVisible = true;
+        let prog = (cycleT - 8.0) / 1.5;
+        cursorX = window.innerWidth * 0.5;
+        cursorY = window.innerHeight * (0.5 + 0.05 * Math.sin(prog * Math.PI));
+        if (Math.abs(cycleT - 8.15) < 0.015) triggerKnock();
+      } else if (cycleT >= 13.0 && cycleT <= 14.0) {
+        if (Math.abs(cycleT - 13.1) < 0.015) triggerKnock();
+      } else if (cycleT >= 19.0 && cycleT <= 20.0) {
+        if (Math.abs(cycleT - 19.1) < 0.015) triggerKnock();
+      } else if (cycleT >= 24.0 && cycleT <= 25.0) {
+        if (Math.abs(cycleT - 24.15) < 0.015) triggerKnock();
+      }
+
+      if (cursorVisible) {
+        fakeCursor.style.left = `${cursorX}px`;
+        fakeCursor.style.top = `${cursorY}px`;
+        fakeCursor.classList.add('visible');
+      } else {
+        fakeCursor.classList.remove('visible');
+      }
+    }
+
+    function updateUniforms(t) {
+      material.uniforms.uTime.value = t;
+      material.uniforms.uRotation.value.set(state.rotX, state.rotY);
+      material.uniforms.uZoom.value = state.zoom;
+      material.uniforms.uSloshAngle.value.set(state.sloshX, state.sloshY);
+      for (let i = 0; i < 8; i++) {
+        material.uniforms.uWaveModes.value[i] = state.waveModes[i];
+      }
+      material.uniforms.uNoteOffset.value.set(state.noteSway, 0.0, state.noteLag);
+      material.uniforms.uNoteStretch.value = state.noteStretch;
+    }
+
+    // Pure deterministic window.seek(t) function
     window.seek = function(t) {
-      const clampedT = Math.max(0, Math.min(t, TOUR_DURATION));
-
-      sloshSim.reset();
-      const fixedDt = 1 / 60;
-      let curT = 0;
-      let lastEuler = new THREE.Euler();
-
-      while (curT <= clampedT) {
-        const s = getTourStateAt(curT);
-        const curEuler = new THREE.Euler(s.rotX, s.rotY, s.rotZ, 'YXZ');
-        const dRotX = (curEuler.x - lastEuler.x) / fixedDt;
-        const dRotY = (curEuler.y - lastEuler.y) / fixedDt;
-        lastEuler = curEuler;
-
-        const rotMat = new THREE.Matrix4().makeRotationFromEuler(curEuler);
-        sloshSim.step(fixedDt, rotMat, new THREE.Vector2(dRotX, dRotY));
-        if (s.impulse > 0) {
-          sloshSim.addImpulse(s.impulse);
-        }
-        curT += fixedDt;
+      resetPhysicsState();
+      const dt = 1.0 / 120.0;
+      let curr = 0;
+      while (curr < t) {
+        let step = Math.min(dt, t - curr);
+        applyTourDrivers(curr);
+        stepPhysics(step);
+        curr += step;
       }
-
-      const finalState = getTourStateAt(clampedT);
-      applyState(finalState);
-      updateLiquidMesh();
-
-      const energy = THREE.MathUtils.clamp((sloshSim.tiltVelocity.length() + sloshSim.impulseWave) * 0.5, 0, 1);
-      updateRings(energy);
-
+      applyTourDrivers(t);
+      updateUniforms(t);
       renderer.render(scene, camera);
     };
 
     if (isRenderMode) {
-      window.seek(0);
       window.renderReady = true;
     } else {
-      let tourClock = 0;
+      let lastTime = performance.now();
+      let frameTimeCount = 0;
+      let frameTimeAccum = 0;
 
       function animate(now) {
         requestAnimationFrame(animate);
+        if (state.paused) return;
 
-        const dt = Math.min((now - lastFrameTime) * 0.001, 0.1);
-        lastFrameTime = now;
+        let dt = Math.min((now - lastTime) / 1000, 0.05);
+        lastTime = now;
 
-        if (!isUserInteracting && !tourPaused) {
-          tourClock += dt;
-          if (tourClock > TOUR_DURATION) {
-            tourClock = 0;
+        frameTimeAccum += dt;
+        frameTimeCount++;
+        if (frameTimeCount >= 30) {
+          let avgFrameTime = frameTimeAccum / frameTimeCount;
+          if (avgFrameTime > 0.025 && dpr > 1.0) {
+            dpr = Math.max(1.0, dpr - 0.25);
+            renderer.setPixelRatio(dpr);
+            material.uniforms.uResolution.value.set(window.innerWidth * dpr, window.innerHeight * dpr);
           }
-
-          const state = getTourStateAt(tourClock);
-          applyState(state);
-
-          const rotMat = new THREE.Matrix4().makeRotationFromQuaternion(iconRoot.quaternion);
-          const ang = new THREE.Vector2(
-            Math.sin(tourClock * 2.0) * 1.5,
-            Math.cos(tourClock * 2.0) * 1.5
-          );
-          sloshSim.step(dt, rotMat, ang);
-          if (state.impulse > 0) {
-            sloshSim.addImpulse(state.impulse);
-          }
-        } else {
-          fakeCursorEl.style.display = 'none';
-
-          if (!isPointerDown) {
-            const deltaQuat = new THREE.Quaternion();
-            deltaQuat.setFromEuler(new THREE.Euler(angularVel.x * dt, angularVel.y * dt, 0, 'XYZ'));
-            iconQuaternion.premultiply(deltaQuat);
-            iconRoot.quaternion.copy(iconQuaternion);
-
-            angularVel.multiplyScalar(Math.max(0, 1 - 3.2 * dt));
-          } else {
-            iconRoot.quaternion.copy(iconQuaternion);
-          }
-
-          const rotMat = new THREE.Matrix4().makeRotationFromQuaternion(iconRoot.quaternion);
-          sloshSim.step(dt, rotMat, angularVel);
+          frameTimeAccum = 0;
+          frameTimeCount = 0;
         }
 
-        updateLiquidMesh();
+        if (state.tourActive && !state.userInteracted) {
+          state.tourTime += dt;
+          applyTourDrivers(state.tourTime);
+        }
 
-        const motionEnergy = THREE.MathUtils.clamp(
-          (sloshSim.tiltVelocity.length() * 0.2 + angularVel.length() * 0.08 + sloshSim.impulseWave * 2.0),
-          0,
-          1
-        );
-        updateRings(motionEnergy);
-
+        stepPhysics(dt);
+        updateUniforms(state.tourTime);
         renderer.render(scene, camera);
       }
-
       requestAnimationFrame(animate);
     }
+
+    // User Interaction & Controls
+    function stopTour() {
+      if (!state.userInteracted) {
+        state.userInteracted = true;
+        state.tourActive = false;
+        fakeCursor.classList.remove('visible');
+      }
+    }
+
+    let isPointerDown = false;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let pointerMoveDist = 0;
+
+    window.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.dock') || e.target.closest('.header')) return;
+      stopTour();
+      isPointerDown = true;
+      state.dragging = true;
+      lastPointerX = e.clientX;
+      lastPointerY = e.clientY;
+      pointerMoveDist = 0;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isPointerDown) return;
+      let dx = e.clientX - lastPointerX;
+      let dy = e.clientY - lastPointerY;
+      pointerMoveDist += Math.abs(dx) + Math.abs(dy);
+
+      state.rotY += dx * 0.011;
+      state.rotX += dy * 0.006;
+      state.rotX = Math.max(-0.6, Math.min(0.6, state.rotX));
+
+      state.velY = dx * 0.011 / 0.016;
+      state.velX = dy * 0.006 / 0.016;
+
+      lastPointerX = e.clientX;
+      lastPointerY = e.clientY;
+    });
+
+    window.addEventListener('pointerup', () => {
+      if (isPointerDown) {
+        isPointerDown = false;
+        state.dragging = false;
+        if (pointerMoveDist < 5) {
+          triggerKnock();
+        }
+      }
+    });
+
+    // Toolbar buttons
+    document.querySelectorAll('.swatch').forEach(sw => {
+      sw.addEventListener('click', (e) => {
+        stopTour();
+        let idx = parseInt(e.currentTarget.getAttribute('data-color'), 10);
+        setPalette(idx);
+      });
+    });
+
+    document.getElementById('btnSpin').addEventListener('click', () => {
+      stopTour();
+      state.autoSpin = !state.autoSpin;
+    });
+
+    document.getElementById('btnSlosh').addEventListener('click', () => {
+      stopTour();
+      triggerKnock();
+    });
+
+    const btnPause = document.getElementById('btnPause');
+    const pauseIcon = document.getElementById('pauseIcon');
+    btnPause.addEventListener('click', () => {
+      stopTour();
+      state.paused = !state.paused;
+      if (state.paused) {
+        pauseIcon.innerHTML = `<polygon points="5,3 19,12 5,21"/>`;
+      } else {
+        pauseIcon.innerHTML = `<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>`;
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 's' || e.key === 'S') {
+        stopTour();
+        state.autoSpin = !state.autoSpin;
+      } else if (e.key === 'w' || e.key === 'W') {
+        stopTour();
+        triggerKnock();
+      } else if (e.key === ' ') {
+        stopTour();
+        state.paused = !state.paused;
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      material.uniforms.uResolution.value.set(window.innerWidth * dpr, window.innerHeight * dpr);
+    });
   </script>
 </body>
 </html>

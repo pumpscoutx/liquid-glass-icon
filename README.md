@@ -1,3 +1,3 @@
 # Liquid Glass Music Icon
 
-A glass app icon with real sloshing coloured liquid and a black music note inside. Drag to rotate, tap swatches to change colour. Single index.html, three.js r160. Recreation inspired by @ann_nnng on X; generated with Gemini.
+A thick glass app icon with sloshing coloured liquid and a black music note inside, rendered with a full-screen SDF raytracer (refraction, per-channel dispersion, studio lighting) in three.js. Drag to spin, tap to slosh, swatches change colour. Original implementation inspired by Ann Nguyen (@ann_nnng); generated with Gemini.
