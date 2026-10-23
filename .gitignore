@@ -4,3 +4,5 @@ ref/
 *.txt
 *.py
 *.js
+*.json
+*.log
